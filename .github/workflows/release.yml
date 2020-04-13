@@ -1,0 +1,35 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  make_release:
+    name: Make release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Bazel output cache
+        id: cache-bazel
+        uses: actions/cache@v1
+        with:
+          path: "${{ github.workspace }}/.bazel-cache"
+          key: ${{ runner.os }}-bazel-out-${{ github.run_id}}
+          restore-keys: |
+            ${{ runner.os }}-bazel-out-
+      - name: Configure bazel config for actions
+        run: |
+          echo "build --config github_actions" > user.bazelrc
+          echo "build --disk_cache ${{ github.workspace }}/.bazel-cache/disk-cache" >> user.bazelrc
+          echo "build --repository_cache ${{ github.workspace }}/.bazel-cache/repo-cache" >> user.bazelrc
+      - name: Build the output zip
+        run: ./ci_scripts/build_aspect_zip.sh proto3repo.zip
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "v0.1-${{ github.run_number }}"
+          prerelease: false
+          title: "Auto generated release"
+          files: |
+            proto3repo.zip
+        id: "automatic_releases"
