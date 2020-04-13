@@ -1,0 +1,3 @@
+build:github_actions --jobs 4
+
+try-import %workspace%/user.bazelrc

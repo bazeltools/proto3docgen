@@ -1,0 +1,2 @@
+workspace(name = "io_bazeltools_aspect")
+

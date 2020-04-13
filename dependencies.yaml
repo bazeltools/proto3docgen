@@ -1,0 +1,71 @@
+options:
+  buildHeader: [ "load(\"@io_bazel_rules_scala//scala:scala_import.bzl\", \"scala_import\")",
+    "load(\"@io_bazel_rules_scala//scala:scala.bzl\", \"scala_library\")" ]
+  languages: [ "java", "scala:2.12.10" ]
+  resolverType: "coursier"
+  resolvers:
+    - id: "mavencentral"
+      type: "default"
+      url: https://repo.maven.apache.org/maven2/
+  strictVisibility: true
+  transitivity: runtime_deps
+  versionConflictPolicy: highest
+
+dependencies:
+  com.github.scopt:
+    scopt:
+      lang: scala
+      version: "4.0.0-RC2"
+
+  io.circe:
+    circe:
+      lang: scala
+      modules: [ "core", "parser" ]
+      version: "0.12.3"
+    circe-derivation:
+      exports:
+        - "io.circe:circe-core"
+        - "org.typelevel:cats-core"
+        - "org.typelevel:cats-kernel"
+      lang: scala
+      version: "0.12.0-M7"
+
+  org.typelevel:
+    cats:
+      lang: scala
+      modules: [ "kernel", "macros" ]
+      version: "2.0.0"
+    cats-core:
+      exports:
+        - "org.typelevel:cats-kernel"
+        - "org.typelevel:cats-macros"
+        - "org.typelevel:machinist"
+      lang: scala
+      version: "2.0.0"
+    machinist:
+      lang: scala
+      version: "0.6.6"
+    paiges-core:
+      lang: scala
+      version: "0.3.0"
+
+replacements:
+  org.scala-lang:
+    scala-compiler:
+      lang: scala/unmangled
+      target: "@io_bazel_rules_scala_scala_compiler//:io_bazel_rules_scala_scala_compiler"
+    scala-library:
+      lang: scala/unmangled
+      target: "@io_bazel_rules_scala_scala_library//:io_bazel_rules_scala_scala_library"
+    scala-reflect:
+      lang: scala/unmangled
+      target: "@io_bazel_rules_scala_scala_reflect//:io_bazel_rules_scala_scala_reflect"
+
+  org.scala-lang.modules:
+    scala-parser-combinators:
+      lang: scala
+      target:
+        "@io_bazel_rules_scala_scala_parser_combinators//:io_bazel_rules_scala_scala_parser_combinators"
+    scala-xml:
+      lang: scala
+      target: "@io_bazel_rules_scala_scala_xml//:io_bazel_rules_scala_scala_xml"
