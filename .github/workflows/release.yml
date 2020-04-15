@@ -24,6 +24,8 @@ jobs:
           echo "build --repository_cache ${{ github.workspace }}/.bazel-cache/repo-cache" >> user.bazelrc
       - name: Build the output zip
         run: ./ci_scripts/build_aspect_zip.sh proto3repo.zip
+      - name: Build update_dependencies.sh
+        run: ./ci_scripts/make_run_doc_generation.sh "v0.1-${{ github.run_number }}"
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -32,4 +34,5 @@ jobs:
           title: "Auto generated release"
           files: |
             proto3repo.zip
+            run_doc_generation.sh
         id: "automatic_releases"

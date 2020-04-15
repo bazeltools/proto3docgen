@@ -26,6 +26,7 @@ object GenerateMarkdown {
       prefix = s"${config.githubPrefix}/blob/master",
       fileName = None,
       typeMap = typeMap,
+      outputRoot = config.outputRoot,
     )
     packageList.foreach(ctx.writePackage(_))
   }

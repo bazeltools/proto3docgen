@@ -1,11 +1,12 @@
 package io.bazeltools.proto3docgen
 
 import scopt.OParser
-
+import java.nio.file.{Paths, Path}
 case class Config(
   jsonPath: String = "",
   githubPrefix: String = "",
-  renderingEngine: Option[Rendering.Engine] = None
+  renderingEngine: Option[Rendering.Engine] = None,
+  outputRoot: Path = null
 )
 
 object Config {
@@ -21,6 +22,9 @@ object Config {
       opt[String]('g', "github-prefix").required()
         .text("Github prefix (e.g. http://github.com/foo/bar)")
         .action((ghp, cfg) => cfg.copy(githubPrefix = ghp)),
+      opt[String]('o', "output-root").required()
+        .text("Output root, where you want the files built by the rendering engine to go")
+        .action((p, cfg) => cfg.copy(outputRoot = Paths.get(p))),
       opt[String]('e', "rendering-engine").required()
         .text("Rendering engine to use. Supported: hugo")
         .validate {re =>
