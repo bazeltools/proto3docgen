@@ -56,7 +56,7 @@ object ExtractOutputGroups {
     buildEvents.flatMap { e =>
       Option(e.getCompleted)
     }.map { target =>
-      target.getOutputGroupList.asScala.filter(_.getName == "runtime_classpath").flatMap { e => e.getFileSetsList.asScala }.flatMap { e =>
+      target.getOutputGroupList.asScala.filter(_.getName == "protodoc_output_json").flatMap { e => e.getFileSetsList.asScala }.flatMap { e =>
         @annotation.tailrec
         def go(pendingIds: List[String], acc: List[Either[Path, ByteString]]): List[Either[Path, ByteString]] = {
           pendingIds match {
