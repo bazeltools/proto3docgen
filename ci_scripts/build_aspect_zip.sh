@@ -57,7 +57,10 @@ rm -rf tmp_dl
 cd $REPO_ROOT
 ./bazel build src/scala/io/bazeltools/proto3docgen:GenerateMarkdown_deploy.jar
 
-mv bazel-bin/src/scala/io/bazeltools/proto3docgen/GenerateMarkdown_deploy.jar $WORKING_PATH/
+mv bazel-bin/src/scala/io/bazeltools/proto3docgen/GenerateMarkdown_deploy.jar $WORKING_PATH/GenerateMarkdown_prebuilt_deploy.jar
+
+./bazel build src/scala/io/bazeltools/proto3docgen/extract_output_groups:ExtractOutputGroups_deploy.jar
+mv bazel-bin/src/scala/io/bazeltools/proto3docgen/extract_output_groups/ExtractOutputGroups_deploy.jar $WORKING_PATH/ExtractOutputGroups_prebuilt_deploy.jar
 
 cd $WORKING_PATH
 zip -r $OUTPUT_PATH .
