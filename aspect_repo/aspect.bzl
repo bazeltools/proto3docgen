@@ -51,7 +51,7 @@ def _print_aspect_impl(target, ctx):
         ret = depset([doc_json])
 
     return struct(output_groups = {
-            "runtime_classpath": ret,
+            "protodoc_output_json": ret,
         })
 
 print_aspect = aspect(
