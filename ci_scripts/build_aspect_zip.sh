@@ -59,5 +59,8 @@ cd $REPO_ROOT
 
 mv bazel-bin/src/scala/io/bazeltools/proto3docgen/GenerateMarkdown_deploy.jar $WORKING_PATH/
 
+./bazel build src/scala/io/bazeltools/proto3docgen/extract_output_groups:ExtractOutputGroups_deploy.jar
+mv bazel-bin/src/scala/io/bazeltools/proto3docgen/extract_output_groups/ExtractOutputGroups_deploy.jar $WORKING_PATH/
+
 cd $WORKING_PATH
 zip -r $OUTPUT_PATH .
