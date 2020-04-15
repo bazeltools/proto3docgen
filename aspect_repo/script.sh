@@ -7,7 +7,7 @@ set +e
 bazel build \
   --override_repository=protoc_doc_helper="$SCRIPTS_DIR" \
   --aspects @protoc_doc_helper//:aspect.bzl%print_aspect \
-  --output_groups=runtime_classpath \
+  --output_groups=protodoc_output_json \
   --keep_going \
   //...
 set -e

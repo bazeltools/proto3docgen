@@ -22,22 +22,3 @@ alias(name = "proto-gen-doc",
       }
   ))
 
-
-sh_binary(
-    name = "run_gen_protoc_docs",
-    srcs = ["run_gen_protoc_docs.sh"],
-    visibility = ["//visibility:public"],
-    args = [
-        "$(location @com_google_protobuf//:protoc)",
-        "$(location :proto-gen-doc)",
-    ],
-    data = [
-        "@com_google_protobuf//:protoc",
-        "proto-gen-doc",
-    ],
-    tags = [
-        "external",
-        "local",
-        "unit",
-    ],
-)
