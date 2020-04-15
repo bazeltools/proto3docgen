@@ -2,7 +2,7 @@ package io.bazeltools.proto3docgen
 
 import io.bazeltools.proto3docgen.repr.{ProtoPackage, ProtoContext}
 import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.Path
 
 object Rendering {
   trait Engine {
@@ -11,7 +11,7 @@ object Rendering {
 
   object Engine {
     def byName(s: String): Option[Engine] =
-      List(Hugo).find {e => e.name == s}
+      List(Hugo).find {e => e.name.toLowerCase == s.toLowerCase}
 
     case object Hugo extends Engine {
       def name = "Hugo"
@@ -21,8 +21,11 @@ object Rendering {
   case class HugoContext(
     prefix: String,
     fileName: Option[String],
-    typeMap: Map[String, (String, String)]
+    typeMap: Map[String, (String, String)],
+    outputRoot: Path
   ) extends ProtoContext {
+    Files.createDirectories(outputRoot)
+
     def withFileName(fn: String): ProtoContext =
       copy(fileName = Some(fn))
 
@@ -47,7 +50,7 @@ title: ${pkg.name}
 ${pkg.toSection(this).toMarkdown(1).render(0)}
 """
       Files.write(
-        Paths.get(s"/Users/siddarth/stripe/uppsala/docs/content/horizon/protobuf/${pkg.name}.md"),
+        outputRoot.resolve(s"${pkg.name}.md"),
         contents.getBytes
       )
     }
