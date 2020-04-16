@@ -43,6 +43,7 @@ case class HugoContext(
 
   def currentPackageName = currentPackageNameOpt.getOrElse(sys.error(s"Invalid state, pkg name is unset :/"))
 
+
   def renderType(fullName: String): String = typeMap.get(fullName) match {
     case Some((protoPkg, longName)) =>
       val targetPackage = pkgToPath(protoPkg)
@@ -62,6 +63,32 @@ case class HugoContext(
       case None => fullName
     }
 
+  private[this] def initializeParents(outputP: Path): Unit = {
+    val outputFolder = outputP.getParent
+
+    val segments = outputP.toString.split('/').toList
+    val root = outputRoot
+    @annotation.tailrec
+    def go(p: Path, remaining: List[String]): Unit = {
+      remaining match {
+        case h :: t =>
+          val nxtFolder  = p.resolve(h)
+          Files.createDirectories(nxtFolder)
+          val indexFilePath = nxtFolder.resolve("_index.md")
+          if(!indexFilePath.toFile.exists) {
+            Files.write(indexFilePath, s"""
+            |---
+            |title: "$h"
+            |---
+            |""".stripMargin.getBytes)
+          }
+          go(nxtFolder, t)
+        case Nil => ()
+      }
+    }
+  }
+
+
   def writePackage(pkg: ProtoPackage): Unit = {
     val pkgTitle = layoutMode match {
       case LayoutMode.Nested => pkg.name.split('.').last
@@ -76,19 +103,7 @@ ${pkg.toSection(this).toMarkdown(1).render(0)}
 """
 
     val outputP = pkgToPath(pkg.name)
-    val outputFolder = outputRoot.resolve(outputP).getParent
-    if(!outputFolder.toFile.exists) {
-      Files.createDirectories(outputFolder)
-      layoutMode match {
-        case LayoutMode.Nested =>
-          Files.write(outputFolder.resolve("_index.md"), s"""
-          |---
-          |title: "${outputFolder.basenameWithoutExtension}"
-          |---
-          |""".stripMargin.getBytes)
-        case _ => ()
-      }
-    }
+    initializeParents(outputP)
     Files.write(
       outputRoot.resolve(outputP),
       contents.getBytes
