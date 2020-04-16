@@ -30,6 +30,9 @@ if [ -z "\$GITHUB_BASE_URL" ]; then
   GITHUB_BASE_URL="https://github.com"
 fi
 
+if [ -z "\$BUILD_TARGETS" ]; then
+  BUILD_TARGETS="//..."
+fi
 
 cd \$ASPECT_REPO_PATH
 curl -L -o proto3repo.zip \${GITHUB_BASE_URL}/bazeltools/proto3docgen/releases/download/${PROTO3_DOC_GEN_VERSION}/proto3repo.zip
@@ -47,7 +50,7 @@ set +e
   --aspects @protoc_doc_helper//:aspect.bzl%print_aspect \
   --output_groups=protodoc_output_json \
   --keep_going \
-  //...
+  \$BUILD_TARGETS
 set -e
 
 if [ ! -f "\$PROTO_BIN_PATH" ]; then
