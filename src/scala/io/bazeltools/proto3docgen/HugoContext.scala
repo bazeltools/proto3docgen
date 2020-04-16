@@ -9,7 +9,7 @@ object HugoContext {
   def stripExtension(fname: String): String = {
     val lastIdx = fname.lastIndexOf('.')
     if(lastIdx > 0) {
-      fname.substring(0, lastIdx - 1)
+      fname.substring(0, lastIdx)
     } else fname
   }
 
@@ -28,7 +28,7 @@ case class HugoContext(
 ) extends ProtoContext {
   import HugoContext._
   def pkgToPath(pkg: String): Path = layoutMode match {
-      case LayoutMode.Nested => Paths.get(s"${pkg.split('.').mkString("/")}.md")
+      case LayoutMode.Nested => Paths.get(s"${pkg.replace('.','/')}.md")
       case LayoutMode.UnNested => Paths.get(s"${pkg}.md")
     }
 
@@ -63,9 +63,13 @@ case class HugoContext(
     }
 
   def writePackage(pkg: ProtoPackage): Unit = {
+    val pkgTitle = layoutMode match {
+      case LayoutMode.Nested => pkg.name.split('.').last
+      case LayoutMode.UnNested => pkg.name
+    }
           val contents = s"""
 ---
-title: ${pkg.name}
+title: ${pkgTitle}
 ---
 
 ${pkg.toSection(this).toMarkdown(1).render(0)}
@@ -79,7 +83,7 @@ ${pkg.toSection(this).toMarkdown(1).render(0)}
         case LayoutMode.Nested =>
           Files.write(outputFolder.resolve("_index.md"), s"""
           |---
-          |title: "${outputP.basenameWithoutExtension}"
+          |title: "${outputFolder.basenameWithoutExtension}"
           |---
           |""".stripMargin.getBytes)
         case _ => ()
