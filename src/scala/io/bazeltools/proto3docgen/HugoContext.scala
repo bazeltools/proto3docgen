@@ -28,7 +28,7 @@ case class HugoContext(
 ) extends ProtoContext {
   import HugoContext._
   def pkgToPath(pkg: String): Path = layoutMode match {
-      case LayoutMode.Nested => Paths.get(s"${pkg.replace('.','/')}.md")
+      case LayoutMode.Nested => Paths.get(s"${pkg.replace('.','/')}/_index.md")
       case LayoutMode.UnNested => Paths.get(s"${pkg}.md")
     }
 
@@ -68,24 +68,25 @@ case class HugoContext(
       val segments = parentPath.toString.split('/').toList
       val root = outputRoot
       @annotation.tailrec
-      def go(p: Path, remaining: List[String]): Unit = {
+      def go(usedSegments: List[String], remaining: List[String]: Unit = {
         remaining match {
           case h :: t =>
-            val nxtFolder  = p.resolve(h)
+            val nextUsed = usedSegments :+ h
+            val nxtFolder  = root.resolve(nextUsed.mkString("/"))
             Files.createDirectories(nxtFolder)
             val indexFilePath = nxtFolder.resolve("_index.md")
             if(!indexFilePath.toFile.exists) {
               Files.write(indexFilePath, s"""
               |---
-              |title: "$h"
+              |title: "${nextUsed.mkString(".")}"
               |---
               |""".stripMargin.getBytes)
             }
-            go(nxtFolder, t)
+            go(nextUsed, t)
           case Nil => ()
         }
       }
-      go(root, segments)
+      go(Nil, segments)
     }
   }
 
