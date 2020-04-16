@@ -1,7 +1,7 @@
 package io.bazeltools.proto3docgen.md
 
 import org.typelevel.paiges.Doc
-import io.bazeltools.proto3docgen.repr.ProtoContext
+import io.bazeltools.proto3docgen.context.ProtoContext
 
 case class Section(
   name: Option[String] = None,

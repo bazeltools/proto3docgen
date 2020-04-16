@@ -1,7 +1,8 @@
 package io.bazeltools.proto3docgen
 
 import io.circe._, io.circe.parser._
-import io.bazeltools.proto3docgen.repr.{File, ProtoContext, ProtodocJson}
+import io.bazeltools.proto3docgen.repr.{File, ProtodocJson}
+import io.bazeltools.proto3docgen.context.ProtoContext
 import java.nio.file.Paths
 import scala.io.Source
 
@@ -22,7 +23,7 @@ object GenerateMarkdown {
       }
     }.toMap
 
-    implicit val ctx = Rendering.HugoContext(
+    implicit val ctx = HugoContext(
       prefix = s"${config.githubPrefix}/blob/master",
       fileName = None,
       typeMap = typeMap,

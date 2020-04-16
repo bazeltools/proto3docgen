@@ -3,13 +3,7 @@ package io.bazeltools.proto3docgen.repr
 import io.circe.derivation.deriveDecoder
 import io.circe._, io.circe.parser._
 import io.bazeltools.proto3docgen.md.{Section, Sectionable, Table, Enrichments}
-
-case class ProtoLocationMap(
-  longName: String,
-  `package`: String,
-) {
-  def ref = s"${`package`}/#${longName.toLowerCase.replaceAll("[^a-z]+", "")}"
-}
+import io.bazeltools.proto3docgen.context.ProtoContext
 
 case class Message(
   name: String,

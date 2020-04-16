@@ -1,6 +1,7 @@
 package io.bazeltools.proto3docgen.repr
 
 import io.bazeltools.proto3docgen.md.{Section, Sectionable, Table, Enrichments}
+import io.bazeltools.proto3docgen.context.ProtoContext
 
 case class ProtoPackage(
   name: String,

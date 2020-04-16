@@ -18,6 +18,7 @@ WORKING_PATH="\$(cd \$WORKING_PATH && pwd)"
 cleanup() {
  rm -rf \$WORKING_PATH
 }
+trap cleanup EXIT
 ASPECT_REPO_PATH="\$WORKING_PATH/aspect_repo"
 mkdir -p "\$ASPECT_REPO_PATH"
 
