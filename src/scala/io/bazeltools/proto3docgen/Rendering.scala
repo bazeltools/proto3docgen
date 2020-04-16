@@ -2,7 +2,7 @@ package io.bazeltools.proto3docgen
 
 import io.bazeltools.proto3docgen.repr.{ProtoPackage, ProtoContext}
 import java.nio.file.Files
-import java.nio.file.{Path, Paths}
+import java.nio.file.Path
 
 object Rendering {
   trait Engine {
@@ -57,7 +57,7 @@ ${pkg.toSection(this).toMarkdown(1).render(0)}
 """
 
       val outputP = pkgToUrl(pkg.name)
-      val outputFolder = Paths.get(outputP).getParent
+      val outputFolder = outputRoot.resolve(outputP).getParent
       if(!outputFolder.toFile.exists) {
         Files.createDirectories(outputFolder)
         layoutMode match {

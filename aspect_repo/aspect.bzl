@@ -10,16 +10,12 @@ _SHELL_SCRIPT_TEMPLATE = """
 
 
 def _print_aspect_impl(target, ctx):
-    # if ProtoInfo in target:
-    #     print(target[ProtoInfo])
-
     ret = depset()
     if ProtoInfo in target:
         doc_json = ctx.actions.declare_file("%s-protoc-json-doc.json" % ctx.rule.attr.name)
         script_file = ctx.actions.declare_file("script-%s.sh" % ctx.rule.attr.name)
 
         transitive_sources = depset(transitive = [target[ProtoInfo].transitive_sources])
-
         transitive_roots = depset(transitive = [target[ProtoInfo].transitive_proto_path])
         transitive_source_paths = " ".join(["-I" + d for d in transitive_roots.to_list()])
         direct_sources = depset(transitive = [f.files for f in ctx.rule.attr.srcs])
