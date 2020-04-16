@@ -46,9 +46,13 @@ case class HugoContext(
   def renderType(fullName: String): String = typeMap.get(fullName) match {
     case Some((protoPkg, longName)) =>
       val targetPackage = pkgToPath(protoPkg)
-      val srcPackage = pkgToPath(currentPackageName).getParent // get the folder that the src package is in
+      val srcPackageOpt = Option(pkgToPath(currentPackageName).getParent) // get the folder that the src package is in
 
-      s"""[$longName]({{< ref "${srcPackage.relativize(targetPackage)}.md#${longName.toLowerCase.replaceAll("[^a-z]+", "")}" >}})"""
+      val pathToTarget = srcPackageOpt match {
+        case None => targetPackage
+        case Some(srcPackage) => srcPackage.relativize(targetPackage)
+      }
+      s"""[$longName]({{< ref "${pathToTarget}#${longName.toLowerCase.replaceAll("[^a-z]+", "")}" >}})"""
     case None => s"`$fullName`"
   }
 
@@ -82,7 +86,7 @@ ${pkg.toSection(this).toMarkdown(1).render(0)}
       }
     }
     Files.write(
-      outputRoot.resolve(s"${outputP}.md"),
+      outputRoot.resolve(outputP),
       contents.getBytes
     )
   }
