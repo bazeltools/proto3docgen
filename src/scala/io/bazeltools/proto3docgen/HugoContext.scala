@@ -97,7 +97,8 @@ case class HugoContext(
     }
           val contents = s"""
 ---
-title: ${pkgTitle}
+title: "${pkg.name}"
+linkTitle: "${pkgTitle}"
 ---
 
 ${pkg.toSection(this).toMarkdown(1).render(0)}
