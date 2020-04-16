@@ -59,8 +59,8 @@ case class HugoContext(
 
   def renderTypeSrc(longName: String, fullName: String): String =
     fileName match {
-      case Some(fn) => s"[$longName]($prefix/$fn) {#${longName.toLowerCase.replaceAll("[^a-z]+", "")}} (${fullName})"
-      case None => s"${longName} (${fullName})"
+      case Some(fn) => s"[$longName]($prefix/$fn) {#${longName.toLowerCase.replaceAll("[^a-z]+", "")}} ${fullName}"
+      case None => s"${longName} ${fullName}"
     }
 
   private[this] def initializeParents(outputP: Path): Unit = {
@@ -79,6 +79,7 @@ case class HugoContext(
               Files.write(indexFilePath, s"""
               |---
               |title: "${nextUsed.mkString(".")}"
+              |linktitle: "${h}"
               |---
               |""".stripMargin.getBytes)
             }
