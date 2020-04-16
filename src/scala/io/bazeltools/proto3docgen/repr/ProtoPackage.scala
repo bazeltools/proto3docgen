@@ -17,6 +17,10 @@ case class ProtoPackage(
   }
 
   def toSection(implicit ctx: ProtoContext): Section = {
+    privToSection(ctx.withActivePackage(name))
+  }
+
+  private[this] def privToSection(implicit ctx: ProtoContext): Section = {
     import Enrichments._
 
     Section()
