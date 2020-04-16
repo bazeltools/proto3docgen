@@ -64,27 +64,29 @@ case class HugoContext(
     }
 
   private[this] def initializeParents(outputP: Path): Unit = {
-    val segments = outputP.getParent.toString.split('/').toList
-    val root = outputRoot
-    @annotation.tailrec
-    def go(p: Path, remaining: List[String]): Unit = {
-      remaining match {
-        case h :: t =>
-          val nxtFolder  = p.resolve(h)
-          Files.createDirectories(nxtFolder)
-          val indexFilePath = nxtFolder.resolve("_index.md")
-          if(!indexFilePath.toFile.exists) {
-            Files.write(indexFilePath, s"""
-            |---
-            |title: "$h"
-            |---
-            |""".stripMargin.getBytes)
-          }
-          go(nxtFolder, t)
-        case Nil => ()
+    Option(outputP.getParent).foreach { parentPath =>
+      val segments = parentPath.toString.split('/').toList
+      val root = outputRoot
+      @annotation.tailrec
+      def go(p: Path, remaining: List[String]): Unit = {
+        remaining match {
+          case h :: t =>
+            val nxtFolder  = p.resolve(h)
+            Files.createDirectories(nxtFolder)
+            val indexFilePath = nxtFolder.resolve("_index.md")
+            if(!indexFilePath.toFile.exists) {
+              Files.write(indexFilePath, s"""
+              |---
+              |title: "$h"
+              |---
+              |""".stripMargin.getBytes)
+            }
+            go(nxtFolder, t)
+          case Nil => ()
+        }
       }
+      go(root, segments)
     }
-    go(root, segments)
   }
 
 
