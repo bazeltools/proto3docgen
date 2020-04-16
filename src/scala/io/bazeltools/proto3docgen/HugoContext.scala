@@ -86,6 +86,7 @@ case class HugoContext(
         case Nil => ()
       }
     }
+    go(root, segments)
   }
 
 
