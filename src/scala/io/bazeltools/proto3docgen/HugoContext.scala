@@ -68,7 +68,7 @@ case class HugoContext(
       val segments = parentPath.toString.split('/').toList
       val root = outputRoot
       @annotation.tailrec
-      def go(usedSegments: List[String], remaining: List[String]: Unit = {
+      def go(usedSegments: List[String], remaining: List[String]): Unit = {
         remaining match {
           case h :: t =>
             val nextUsed = usedSegments :+ h
