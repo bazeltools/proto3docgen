@@ -27,6 +27,7 @@ object GenerateMarkdown {
       fileName = None,
       typeMap = typeMap,
       outputRoot = config.outputRoot,
+      layoutMode = config.layoutMode
     )
     packageList.foreach(ctx.writePackage(_))
   }

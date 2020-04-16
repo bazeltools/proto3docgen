@@ -22,8 +22,14 @@ object Rendering {
     prefix: String,
     fileName: Option[String],
     typeMap: Map[String, (String, String)],
-    outputRoot: Path
+    outputRoot: Path,
+    layoutMode: LayoutMode
   ) extends ProtoContext {
+    def pkgToUrl(pkg: String): String = layoutMode match {
+        case LayoutMode.Nested => pkg.split('.').mkString("/")
+        case LayoutMode.UnNested => pkg
+      }
+
     Files.createDirectories(outputRoot)
 
     def withFileName(fn: String): ProtoContext =
@@ -31,7 +37,7 @@ object Rendering {
 
     def renderType(fullName: String): String = typeMap.get(fullName) match {
       case Some((protoPkg, longName)) =>
-        s"""[$longName]({{< ref "${protoPkg}.md#${longName.toLowerCase.replaceAll("[^a-z]+", "")}" >}})"""
+        s"""[$longName]({{< ref "${pkgToUrl(protoPkg)}.md#${longName.toLowerCase.replaceAll("[^a-z]+", "")}" >}})"""
       case None => s"`$fullName`"
     }
 
@@ -50,7 +56,7 @@ title: ${pkg.name}
 ${pkg.toSection(this).toMarkdown(1).render(0)}
 """
       Files.write(
-        outputRoot.resolve(s"${pkg.name}.md"),
+        outputRoot.resolve(s"${pkgToUrl(pkg.name)}.md"),
         contents.getBytes
       )
     }
