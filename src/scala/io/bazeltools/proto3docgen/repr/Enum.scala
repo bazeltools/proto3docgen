@@ -18,7 +18,7 @@ object Enum {
   implicit val sec: Sectionable[Enum] = new Sectionable[Enum] {
     def toSection(s: Enum)(implicit ctx: ProtoContext) =
       Section()
-        .withName(ctx.renderTypeSrc(s.longName))
+        .withName(ctx.renderTypeSrc(s.longName, s.fullName))
         .withDescription(s.description)
         .withInnerSection {
           import EnumValue._

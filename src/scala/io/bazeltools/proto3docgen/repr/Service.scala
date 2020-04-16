@@ -20,7 +20,7 @@ object Service {
   implicit val sec: Sectionable[Service] = new Sectionable[Service] {
     def toSection(s: Service)(implicit ctx: ProtoContext) =
       Section()
-        .withName(ctx.renderTypeSrc(s.longName))
+        .withName(ctx.renderTypeSrc(s.longName, s.fullName))
         .withDescription(s.description)
         .withInnerSection {
           import Method._

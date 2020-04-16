@@ -21,7 +21,7 @@ object Message {
   implicit val sec: Sectionable[Message] = new Sectionable[Message] {
     def toSection(s: Message)(implicit ctx: ProtoContext) =
       Section()
-        .withName(ctx.renderTypeSrc(s.longName))
+        .withName(ctx.renderTypeSrc(s.longName, s.fullName))
         .withDescription(s.description)
         .withInnerSection {
           import Field._

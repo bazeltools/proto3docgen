@@ -57,10 +57,10 @@ case class HugoContext(
     case None => s"`$fullName`"
   }
 
-  def renderTypeSrc(fullName: String): String =
+  def renderTypeSrc(longName: String, fullName: String): String =
     fileName match {
-      case Some(fn) => s"[$fullName]($prefix/$fn) {#${fullName.toLowerCase.replaceAll("[^a-z]+", "")}} (${typeMap(fullName)._1}.${fullName})"
-      case None => s"${fullName} (${typeMap(fullName)._1}.${fullName})"
+      case Some(fn) => s"[$longName]($prefix/$fn) {#${longName.toLowerCase.replaceAll("[^a-z]+", "")}} (${typeMap(fullName)._1}.${fullName})"
+      case None => s"${longName} (${typeMap(fullName)._1}.${fullName})"
     }
 
   private[this] def initializeParents(outputP: Path): Unit = {
