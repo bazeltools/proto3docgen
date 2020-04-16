@@ -64,9 +64,7 @@ case class HugoContext(
     }
 
   private[this] def initializeParents(outputP: Path): Unit = {
-    val outputFolder = outputP.getParent
-
-    val segments = outputP.toString.split('/').toList
+    val segments = outputP.getParent.toString.split('/').toList
     val root = outputRoot
     @annotation.tailrec
     def go(p: Path, remaining: List[String]): Unit = {
