@@ -59,7 +59,7 @@ case class HugoContext(
 
   def renderTypeSrc(fullName: String): String =
     fileName match {
-      case Some(fn) => s"[$fullName]($prefix/$fn) {#${fullName.toLowerCase.replaceAll("[^a-z]+", "")}}"
+      case Some(fn) => s"[$fullName]($prefix/$fn) {#${fullName.toLowerCase.replaceAll("[^a-z]+", "")}} (${typeMap(fullName)._1}.${fullName})"
       case None => fullName
     }
 
