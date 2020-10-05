@@ -10,7 +10,7 @@ case class Service(
   longName: String,
   fullName: String,
   description: String,
-  methods: List[Method]
+  methods: Option[List[Method]], // We will handle an empty list, circe however will complain if its null
 )
 
 object Service {
@@ -25,7 +25,7 @@ object Service {
         .withInnerSection {
           import Method._
           Sectionable
-            .toSection(s.methods)
+            .toSection(s.methods.getOrElse(Nil))
             .withName("Methods")
         }
   }
