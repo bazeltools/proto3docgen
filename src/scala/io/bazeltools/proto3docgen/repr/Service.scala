@@ -25,7 +25,7 @@ object Service {
         .withInnerSection {
           import Method._
           Sectionable
-            .toSection(s.methods.getOrElse(List.empty))
+            .toSection(s.methods.getOrElse(Nil))
             .withName("Methods")
         }
   }
