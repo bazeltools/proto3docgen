@@ -10,7 +10,7 @@ case class Service(
   longName: String,
   fullName: String,
   description: String,
-  methods: List[Method]
+  methods: Option[List[Method]],
 )
 
 object Service {
@@ -25,7 +25,7 @@ object Service {
         .withInnerSection {
           import Method._
           Sectionable
-            .toSection(s.methods)
+            .toSection(s.methods.getOrElse(List.empty))
             .withName("Methods")
         }
   }
