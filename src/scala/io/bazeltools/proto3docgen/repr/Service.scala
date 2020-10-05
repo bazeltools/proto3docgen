@@ -10,7 +10,7 @@ case class Service(
   longName: String,
   fullName: String,
   description: String,
-  methods: Option[List[Method]],
+  methods: Option[List[Method]], // We will handle an empty list, circe however will complain if its null
 )
 
 object Service {
